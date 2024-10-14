@@ -1,30 +1,17 @@
-const { ApolloServer, gql } = require("apollo-server-express");
-const express = require("express");
-
-const typeDefs = gql`
-    type Query {
-        hello: String
-    }
-`;
-
-const resolvers = {
-    Query: {
-        hello: () => "Hello World!",
-    },
-};
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express');
+const { typeDefs, resolvers } = require('./src/peopleCarsScheme'); 
 
 async function startServer() {
-    const app = express();
-    const server = new ApolloServer({ typeDefs, resolvers });
+  const app = express();
+  const server = new ApolloServer({ typeDefs, resolvers });
 
-    await server.start();
-    server.applyMiddleware({ app });
+  await server.start();
+  server.applyMiddleware({ app });
 
-    app.listen({ port: 4000 }, () =>
-        console.log(
-            `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
-        )
-    );
+  app.listen({ port: 4000 }, () =>
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  );
 }
 
 startServer();
