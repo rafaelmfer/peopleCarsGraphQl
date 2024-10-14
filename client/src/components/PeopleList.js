@@ -5,6 +5,23 @@ import { GET_PEOPLE } from "../graphql/queries";
 import { DELETE_PERSON, DELETE_CAR } from "../graphql/mutations";
 import EditPerson from "./EditPerson";
 import EditCar from "./EditCar";
+import {
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    Box,
+    IconButton,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
+const formatCurrency = (price) => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(price);
+};
 
 function PeopleList() {
     const { loading, error, data } = useQuery(GET_PEOPLE);
@@ -29,78 +46,136 @@ function PeopleList() {
     };
 
     return (
-        <div>
-            <h2>People</h2>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             {data.people.map((person) => (
-                <div
-                    key={person.id}
-                    style={{
-                        border: "1px solid #ccc",
-                        margin: "10px",
-                        padding: "10px",
-                    }}
-                >
-                    {editingPersonId === person.id ? (
-                        <EditPerson
-                            person={person}
-                            setEditing={() => setEditingPersonId(null)}
-                        />
-                    ) : (
-                        <>
-                            <h3>
-                                {person.firstName} {person.lastName}
-                            </h3>
-                            <h4>Cars:</h4>
-                            <ul>
-                                {person.cars.map((car) => (
-                                    <li key={car.id}>
-                                        {editingCarId === car.id ? (
-                                            <EditCar
-                                                car={car}
-                                                people={data.people}
-                                                setEditing={() =>
-                                                    setEditingCarId(null)
-                                                }
-                                            />
-                                        ) : (
-                                            <>
-                                                {car.make} {car.model} - $
-                                                {car.price}
-                                                <button
-                                                    onClick={() =>
-                                                        setEditingCarId(car.id)
+                <Card variant="outlined" key={person.id}>
+                    <CardContent>
+                        {editingPersonId === person.id ? (
+                            <EditPerson
+                                person={person}
+                                setEditing={() => setEditingPersonId(null)}
+                            />
+                        ) : (
+                            <>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Typography variant="h5" component="div">
+                                        {person.firstName} {person.lastName}
+                                    </Typography>
+                                    <Box>
+                                        <IconButton
+                                            color="primary"
+                                            onClick={() =>
+                                                setEditingPersonId(person.id)
+                                            }
+                                        >
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="secondary"
+                                            onClick={() =>
+                                                handleDeletePerson(person.id)
+                                            }
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Box>
+                                </Box>
+
+                                <Typography
+                                    variant="h6"
+                                    sx={{ marginTop: "10px" }}
+                                >
+                                    Cars:
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "4px",
+                                        marginBottom: "16px",
+                                    }}
+                                >
+                                    {person.cars.map((car) => (
+                                        <Box
+                                            key={car.id}
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            {editingCarId === car.id ? (
+                                                <EditCar
+                                                    car={car}
+                                                    people={data.people}
+                                                    setEditing={() =>
+                                                        setEditingCarId(null)
                                                     }
-                                                >
-                                                    Edit Car
-                                                </button>
-                                                <button
-                                                    onClick={() =>
-                                                        handleDeleteCar(car.id)
-                                                    }
-                                                >
-                                                    Delete Car
-                                                </button>
-                                            </>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                            <Link to={`/people/${person.id}`}>Learn More</Link>
-                            <button
-                                onClick={() => setEditingPersonId(person.id)}
-                            >
-                                Edit Person
-                            </button>
-                            <button
-                                onClick={() => handleDeletePerson(person.id)}
-                            >
-                                Delete Person
-                            </button>
-                        </>
-                    )}
-                </div>
+                                                />
+                                            ) : (
+                                                <>
+                                                    <Typography>
+                                                        {car.year} {car.make}{" "}
+                                                        {car.model} -{" "}
+                                                        {formatCurrency(
+                                                            car.price
+                                                        )}
+                                                    </Typography>
+                                                    <Box>
+                                                        <IconButton
+                                                            color="primary"
+                                                            onClick={() =>
+                                                                setEditingCarId(
+                                                                    car.id
+                                                                )
+                                                            }
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton
+                                                            color="secondary"
+                                                            onClick={() =>
+                                                                handleDeleteCar(
+                                                                    car.id
+                                                                )
+                                                            }
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </Box>
+                                                </>
+                                            )}
+                                        </Box>
+                                    ))}
+                                </Box>
+
+                                <Link
+                                    to={`/people/${person.id}`}
+                                    style={{
+                                        textDecoration: "none",
+                                        marginTop: "10px",
+                                    }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="info"
+                                        fullWidth
+                                    >
+                                        Learn More
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
+                    </CardContent>
+                </Card>
             ))}
-        </div>
+        </Box>
     );
 }
 

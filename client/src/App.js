@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Container, Typography, Divider } from "@mui/material";
 import PeopleList from "./components/PeopleList";
 import AddPerson from "./components/AddPerson";
 import AddCar from "./components/AddCar";
@@ -15,22 +16,35 @@ function App() {
 
     return (
         <Router>
-            <div className="App">
+            <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    People and Their Cars
+                </Typography>
+                <Divider style={{ marginBottom: "20px" }} />
                 <Routes>
                     <Route
                         path="/"
                         element={
                             <>
-                                <h1>People and Cars</h1>
                                 <AddPerson />
                                 <AddCar people={data.people} />
+                                <Typography
+                                    variant="h5"
+                                    gutterBottom
+                                    style={{
+                                        marginTop: "20px",
+                                        fontWeight: "600",
+                                    }}
+                                >
+                                    Records
+                                </Typography>
                                 <PeopleList />
                             </>
                         }
                     />
                     <Route path="/people/:id" element={<ShowPerson />} />
                 </Routes>
-            </div>
+            </Container>
         </Router>
     );
 }

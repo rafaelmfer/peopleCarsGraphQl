@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_CAR } from "../graphql/mutations";
 import { GET_PEOPLE } from "../graphql/queries";
+import {
+    TextField,
+    Button,
+    Grid,
+    Box,
+    MenuItem,
+    Typography,
+    InputAdornment,
+} from "@mui/material";
 
 function AddCar({ people }) {
     const [year, setYear] = useState("");
@@ -34,60 +43,82 @@ function AddCar({ people }) {
         }
     };
 
+    const isFormValid = year && make && model && price && personId;
+
     return (
-        <div>
-            <h2>Add Car</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Year: </label>
-                    <input
-                        type="number"
+        <Box sx={{ marginBottom: "20px" }}>
+            <Typography variant="h6">Add Car</Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={2}>
+                    <TextField
+                        label="Year *"
+                        fullWidth
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
+                        type="number"
                     />
-                </div>
-                <div>
-                    <label>Make: </label>
-                    <input
-                        type="text"
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                    <TextField
+                        label="Make *"
+                        fullWidth
                         value={make}
                         onChange={(e) => setMake(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label>Model: </label>
-                    <input
-                        type="text"
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                    <TextField
+                        label="Model *"
+                        fullWidth
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label>Price: </label>
-                    <input
-                        type="number"
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <TextField
+                        label="Price *"
+                        fullWidth
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        type="number"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    $
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                </div>
-                <div>
-                    <label>Owner: </label>
-                    <select
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <TextField
+                        select
+                        label="Person *"
+                        fullWidth
                         value={personId}
                         onChange={(e) => setPersonId(e.target.value)}
                     >
-                        <option value="">Select Owner</option>
                         {people &&
                             people.map((person) => (
-                                <option key={person.id} value={person.id}>
+                                <MenuItem key={person.id} value={person.id}>
                                     {person.firstName} {person.lastName}
-                                </option>
+                                </MenuItem>
                             ))}
-                    </select>
-                </div>
-                <button type="submit">Add Car</button>
-            </form>
-        </div>
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={handleSubmit}
+                        disabled={!isFormValid}
+                    >
+                        Add Car
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 

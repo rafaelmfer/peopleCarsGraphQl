@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_PERSON } from "../graphql/mutations";
 import { GET_PEOPLE } from "../graphql/queries";
+import { TextField, Button, Grid, Box, Typography } from "@mui/material";
 
 function AddPerson() {
     const [firstName, setFirstName] = useState("");
@@ -20,29 +21,42 @@ function AddPerson() {
         }
     };
 
+    const isFormValid = firstName && lastName;
+
     return (
-        <div>
-            <h2>Add Person</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>First Name: </label>
-                    <input
-                        type="text"
+        <Box sx={{ marginBottom: "20px" }}>
+            <Typography variant="h6">Add Person</Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={5}>
+                    <TextField
+                        label="First Name *"
+                        fullWidth
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label>Last Name: </label>
-                    <input
-                        type="text"
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                    <TextField
+                        label="Last Name *"
+                        fullWidth
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
-                </div>
-                <button type="submit">Add Person</button>
-            </form>
-        </div>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={handleSubmit}
+                        disabled={!isFormValid}
+                        style={{ height: "100%" }}
+                    >
+                        Add Person
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 
