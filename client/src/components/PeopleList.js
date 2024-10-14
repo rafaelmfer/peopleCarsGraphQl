@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_PEOPLE } from "../graphql/queries";
 import { DELETE_PERSON, DELETE_CAR } from "../graphql/mutations";
@@ -56,7 +57,7 @@ function PeopleList() {
                                         {editingCarId === car.id ? (
                                             <EditCar
                                                 car={car}
-                                                people={data.people} // Passando as pessoas para o dropdown do dono
+                                                people={data.people}
                                                 setEditing={() =>
                                                     setEditingCarId(null)
                                                 }
@@ -84,6 +85,7 @@ function PeopleList() {
                                     </li>
                                 ))}
                             </ul>
+                            <Link to={`/people/${person.id}`}>Learn More</Link>
                             <button
                                 onClick={() => setEditingPersonId(person.id)}
                             >

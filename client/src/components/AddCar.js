@@ -77,11 +77,12 @@ function AddCar({ people }) {
                         onChange={(e) => setPersonId(e.target.value)}
                     >
                         <option value="">Select Owner</option>
-                        {people.map((person) => (
-                            <option key={person.id} value={person.id}>
-                                {person.firstName} {person.lastName}
-                            </option>
-                        ))}
+                        {people &&
+                            people.map((person) => (
+                                <option key={person.id} value={person.id}>
+                                    {person.firstName} {person.lastName}
+                                </option>
+                            ))}
                     </select>
                 </div>
                 <button type="submit">Add Car</button>
