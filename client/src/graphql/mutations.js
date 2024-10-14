@@ -9,3 +9,27 @@ export const ADD_PERSON = gql`
         }
     }
 `;
+
+export const ADD_CAR = gql`
+    mutation AddCar(
+        $year: Int!
+        $make: String!
+        $model: String!
+        $price: Float!
+        $personId: ID!
+    ) {
+        addCar(
+            year: $year
+            make: $make
+            model: $model
+            price: $price
+            personId: $personId
+        ) {
+            id
+            make
+            model
+            price
+            personId
+        }
+    }
+`;
